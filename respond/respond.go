@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/manigandand/adk/errors"
+	"github.com/SquareX-Labs/adk/errors"
 	log "github.com/sirupsen/logrus"
 )
 

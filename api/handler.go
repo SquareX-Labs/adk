@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/manigandand/adk/errors"
-	"github.com/manigandand/adk/respond"
+	"github.com/SquareX-Labs/adk/errors"
+	"github.com/SquareX-Labs/adk/respond"
 )
 
 // API Handler's ---------------------------------------------------------------

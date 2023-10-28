@@ -6,9 +6,9 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/SquareX-Labs/adk/errors"
 	"github.com/google/uuid"
 	"github.com/gorilla/schema"
-	"github.com/manigandand/adk/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -20,17 +20,18 @@ type ok interface {
 // Decode - decodes the request body and extends the validator interface with the Validate() method
 //
 // EX:
-// type User struct {
-// 	Email        string       `json:"email"`
-// 	Name         string       `json:"name"`
-// }
 //
-// func (c *Component) Validate() *errors.AppError {
-// 	if c.Email == "" {
-// 		return errors.IsRequiredErr("email")
-// 	}
-// 	return nil
-// }
+//	type User struct {
+//		Email        string       `json:"email"`
+//		Name         string       `json:"name"`
+//	}
+//
+//	func (c *Component) Validate() *errors.AppError {
+//		if c.Email == "" {
+//			return errors.IsRequiredErr("email")
+//		}
+//		return nil
+//	}
 func Decode(r *http.Request, v interface{}) *errors.AppError {
 	if err := json.NewDecoder(r.Body).Decode(v); err != nil {
 		return errors.UnprocessableEntity("unmarshal request payload").

@@ -3,10 +3,10 @@ package main
 import (
 	"net/http"
 
-	"github.com/manigandand/adk/api"
-	"github.com/manigandand/adk/errors"
-	"github.com/manigandand/adk/middleware"
-	"github.com/manigandand/adk/respond"
+	"github.com/SquareX-Labs/adk/api"
+	"github.com/SquareX-Labs/adk/errors"
+	"github.com/SquareX-Labs/adk/middleware"
+	"github.com/SquareX-Labs/adk/respond"
 
 	"github.com/go-chi/chi/v5"
 )

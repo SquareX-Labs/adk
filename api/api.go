@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/manigandand/adk/respond"
+	"github.com/SquareX-Labs/adk/respond"
 )
 
 // ServiceInfo stores basic service information

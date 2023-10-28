@@ -1,4 +1,4 @@
-module github.com/manigandand/adk
+module github.com/SquareX-Labs/adk
 
 go 1.18
 
