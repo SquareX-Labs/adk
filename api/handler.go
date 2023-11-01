@@ -1,6 +1,9 @@
 package api
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -20,6 +23,8 @@ func (fn Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// use logger middleware at the root of the router chain as possible
 
 	if err := fn(w, r); err != nil {
+		url := fmt.Sprintf("%s %s?%s", r.Method, r.URL.Path, r.URL.RawQuery)
+		notifySlack(url, err)
 		// TODO: handle 5XX, notify developers. Configurable
 		if fErr := respond.Fail(w, err); fErr.NotNil() {
 			log.Printf("[panic] failed to write response. [%s] %s [%d] %s?%s",
@@ -35,4 +40,25 @@ var RequestIDHeader = "X-Request-Id"
 
 func getReqID(r *http.Request) string {
 	return r.Context().Value(RequestIDHeader).(string)
+}
+
+// notifySlack notifies the slack channel with the error message
+func notifySlack(url string, err *errors.AppError) {
+	if slackHookInfo == "" {
+		return
+	}
+	errType := "client-err"
+	if err.GetStatus() > 499 {
+		errType = "server-err"
+	}
+
+	prefix := fmt.Sprintf("%s ATTENTION %s %d", ServiceName, errType, err.GetStatus())
+	message := err.Error()
+
+	errStr := fmt.Sprintf("%s: \n```%s\n%s```", prefix, url, message)
+	data := map[string]string{"text": errStr}
+
+	jsonData, _ := json.Marshal(data)
+
+	http.Post(slackHookInfo, "application/json", bytes.NewBuffer(jsonData))
 }

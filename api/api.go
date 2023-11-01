@@ -19,6 +19,8 @@ type ServiceInfo struct {
 var (
 	ServiceName = ""
 	serviceInfo *ServiceInfo
+
+	slackHookInfo string
 )
 
 // InitService sets the service name
@@ -30,6 +32,11 @@ func InitService(name, version string) {
 		Uptime:  time.Now(),
 		Epoch:   time.Now().Unix(),
 	}
+}
+
+// InitSlackWebhook sets the slack webhook url
+func InitSlackWebhook(url string) {
+	slackHookInfo = url
 }
 
 // Basic Handler func ---------------------------------------------------------------
