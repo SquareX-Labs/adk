@@ -66,8 +66,9 @@ func (err *AppError) MarshalJSON() ([]byte, error) {
 	}
 
 	m := map[string]interface{}{
-		"status": err.status,
-		"error":  err.Error(), // err.Message
+		"status":      "failed",
+		"status_code": err.status,
+		"error":       err.Error(), // err.Message
 	}
 	if err.conflictData != nil {
 		m["conflict_data"] = err.conflictData
@@ -86,7 +87,7 @@ func (err *AppError) UnmarshalJSON(b []byte) error {
 	}
 
 	var appErr struct {
-		Status       int         `json:"status"`
+		Status       int         `json:"status_code"`
 		Message      string      `json:"error"`
 		ConflictData interface{} `json:"conflict_data"`
 		ErrorDetails *Details    `json:"error_details"`
@@ -137,7 +138,7 @@ func (err *AppError) Log() {
 			stackTraceLimit = len(traceErr.StackTrace())
 		}
 
-		log.Printf("[debug-error-trace]%+v\n", traceErr.StackTrace()[:stackTraceLimit])
+		log.Printf("[debug-error-trace]%+v\n", traceErr.StackTrace()[1:stackTraceLimit])
 	}
 }
 
