@@ -132,6 +132,10 @@ func (err *AppError) Log() {
 	}
 
 	log.Println("[debug-error] " + err.debug.Error())
+	if err.status < 500 {
+		return
+	}
+
 	stackTraceLimit := MaxStackTraceLimit
 	if traceErr, ok := err.debug.(stackTracer); ok {
 		if len(traceErr.StackTrace()) < stackTraceLimit {
