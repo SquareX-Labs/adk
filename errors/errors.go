@@ -11,7 +11,7 @@ import (
 )
 
 // MaxStackTraceLimit allows to print only max 5 frames
-const MaxStackTraceLimit = 5
+const MaxStackTraceLimit = 3
 
 // AppError struct holds the value of HTTP status code and custom error message.
 // https://go.dev/blog/error-handling-and-go
@@ -138,11 +138,16 @@ func (err *AppError) Log() {
 
 	stackTraceLimit := MaxStackTraceLimit
 	if traceErr, ok := err.debug.(stackTracer); ok {
-		if len(traceErr.StackTrace()) < stackTraceLimit {
-			stackTraceLimit = len(traceErr.StackTrace())
+		trace := traceErr.StackTrace()
+		// strip the first 3 frames
+		if len(trace) > 3 {
+			trace = trace[2:]
+		}
+		if len(trace) < stackTraceLimit {
+			stackTraceLimit = len(trace)
 		}
 
-		log.Printf("[debug-error-trace]%+v\n", traceErr.StackTrace()[1:stackTraceLimit])
+		log.Printf("[debug-error-trace]%+v\n", trace[:stackTraceLimit])
 	}
 }
 
