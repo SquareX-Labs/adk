@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/SquareX-Labs/adk/errors"
 	"github.com/SquareX-Labs/adk/respond"
@@ -62,7 +63,8 @@ func notifySlack(url string, body []byte, err *errors.AppError) {
 	prefix := fmt.Sprintf("%s ATTENTION %s %d", ServiceName, errType, err.GetStatus())
 	message := err.Error()
 
-	errStr := fmt.Sprintf("%s: \n```Path: %s\n Payload: %s\n\n Msg: %s```", prefix, url, string(body), message)
+	errStr := fmt.Sprintf("%s: \n```Time:%v\nPath: %s\nPayload: %s\n\nError: %s```",
+		prefix, time.Now().Format(time.RFC3339), url, string(body), message)
 	data := map[string]string{"text": errStr}
 
 	jsonData, _ := json.Marshal(data)
